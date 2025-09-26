@@ -1,0 +1,16 @@
+<div class="pulls-container">
+  <mat-progress-spinner *ngIf="loading" mode="indeterminate" diameter="40"></mat-progress-spinner>
+
+  <div *ngIf="!loading && rowData.length === 0" class="no-data">
+    No pull requests found.
+  </div>
+
+  <ag-grid-angular
+    *ngIf="!loading && rowData.length > 0"
+    class="ag-theme-alpine"
+    style="width: 100%;"
+    [rowData]="rowData"
+    [columnDefs]="colDefs"
+    [gridOptions]="gridOptions">
+  </ag-grid-angular>
+</div>

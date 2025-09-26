@@ -1,0 +1,13 @@
+<ng-container *ngIf="status?.connected; else notConnected">
+  <mat-chip color="accent" selected>
+    <mat-icon color="primary">check_circle</mat-icon>
+    Connected as {{ status?.username }} • {{ status?.connectedAt | date:'medium' }}
+  </mat-chip>
+</ng-container>
+
+<ng-template #notConnected>
+  <mat-chip color="warn" selected>
+    <mat-icon>cancel</mat-icon>
+    Not connected
+  </mat-chip>
+</ng-template>

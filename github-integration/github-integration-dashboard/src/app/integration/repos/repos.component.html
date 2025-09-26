@@ -1,0 +1,24 @@
+<div class="repos-container">
+  <mat-progress-spinner *ngIf="loading" mode="indeterminate" diameter="40"></mat-progress-spinner>
+
+  <ag-grid-angular
+    class="ag-theme-alpine"
+    style="width: 100%;"
+    [rowData]="rowData"
+    [columnDefs]="colDefs"
+    [gridOptions]="gridOptions">
+  </ag-grid-angular>
+
+  <!-- Repo detail navigation if ID present -->
+  <div *ngIf="router.url.includes('/repos/')">
+    <nav mat-tab-nav-bar>
+      <a mat-tab-link [routerLink]="['commits']" routerLinkActive="active">Commits</a>
+      <a mat-tab-link [routerLink]="['pulls']" routerLinkActive="active">Pulls</a>
+      <a mat-tab-link [routerLink]="['issues']" routerLinkActive="active">Issues</a>
+      <a mat-tab-link [routerLink]="['users']" routerLinkActive="active">Users</a>
+    </nav>
+
+    <!-- Child routes render here -->
+    <router-outlet></router-outlet>
+  </div>
+</div>

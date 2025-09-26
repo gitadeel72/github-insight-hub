@@ -1,0 +1,113 @@
+<mat-card class="integration-card">
+  <div class="container">
+  <mat-card *ngIf="integration.statusSig() && !integration.statusSig().connected">
+    <mat-card-title>GitHub Integration</mat-card-title>
+    <mat-card-content>
+      <p>Connect your GitHub account to fetch organisations, repositories, commits and more.</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="connect()" [disabled]="loading">
+        <!-- <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar> -->
+        <span *ngIf="!loading">Connect GitHub</span>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card *ngIf="integration.statusSig() && integration.statusSig().connected">
+    <mat-card-title>GitHub Connected</mat-card-title>
+    <mat-card-content>
+      <app-status-chip [status]="integration.statusSig()"></app-status-chip>
+
+    </mat-card-content>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Integration Actions</mat-panel-title>
+      </mat-expansion-panel-header>
+      <button mat-button color="warn" (click)="remove()">Remove Integration</button>
+      <button mat-button color="primary" (click)="resync()" [disabled]="loading">Re-sync Integration</button>
+      <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+    </mat-expansion-panel>
+  </mat-card>
+</div>
+  <!-- <div class="header">
+    <h2>GitHub Integration</h2>
+    <app-status-chip [status]="integration.statusSig()"></app-status-chip>
+  </div>
+
+  <div class="connect-row">
+    <button mat-raised-button color="primary"
+            (click)="connect()"
+            [disabled]="integration.statusSig().connected">
+      <mat-icon>link</mat-icon> Connect GitHub
+    </button>
+
+    <div class="user" *ngIf="integration.statusSig()?.user as u">
+      <img *ngIf="u.avatarUrl" [src]="u.avatarUrl" width="32" height="32" alt="avatar">
+      <span>{{ u.login }}</span>
+    </div>
+  </div> -->
+
+  <!-- Routed Tab Navigation -->
+  <!-- <nav mat-tab-nav-bar [tabPanel]="tabPanel">
+    <a
+      mat-tab-link
+      *ngFor="let link of navLinks"
+      [routerLink]="link.path"
+      routerLinkActive #rla="routerLinkActive"
+      [active]="rla.isActive"
+      [disabled]="!integration.statusSig().connected">
+      {{ link.label }}
+    </a>
+  </nav>
+
+  <mat-tab-nav-panel #tabPanel>
+    <router-outlet></router-outlet>
+  </mat-tab-nav-panel> -->
+
+</mat-card>
+
+
+<div class="container" *ngIf="integration.statusSig() && integration.statusSig().connected">
+  <mat-card>
+    <mat-card-title>Data Viewer</mat-card-title>
+    <mat-card-content>
+      <div class="controls">
+        <mat-form-field appearance="fill">
+          <mat-label>Integration</mat-label>
+          <mat-select disabled>
+            <mat-option value="github">GitHub</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Entity/Collection</mat-label>
+          <mat-select [(value)]="selectedCollection" (selectionChange)="onCollectionChange()">
+            <mat-option *ngFor="let c of collections" [value]="c">{{ c }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="search-field">
+          <mat-label>Search</mat-label>
+          <input matInput [(ngModel)]="searchTerm" (keyup.enter)="onSearch()" />
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="onSearch()">Search</button>
+      </div>
+      <div class="ag-theme-alpine" style="width: 100%; height: 500px;">
+        <ag-grid-angular style="width: 100%; height: 500px" class="ag-theme-alpine" [rowData]="rowData"
+          [columnDefs]="columnDefs" [defaultColDef]="{ sortable: true, filter: true, resizable: true }"
+          (gridReady)="onGridReady($event)">
+        </ag-grid-angular>
+
+      </div>
+      <div class="pagination" *ngIf="selectedCollection">
+        <button mat-button (click)="onPaginationChange(page - 1)" [disabled]="page <= 1">Prev</button>
+        <span>Page {{ page }} of {{ totalRows ? Math.ceil(totalRows / pageSize) : 1 }}</span>
+        <button
+          mat-button
+          (click)="onPaginationChange(page + 1)"
+          [disabled]="page >= Math.ceil(totalRows / pageSize)"
+        >
+          Next
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
